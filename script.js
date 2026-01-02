@@ -32,12 +32,12 @@ scrollToTopBtn.addEventListener('click', () => {
   });
 });
 
-// Contact Form Handling
+// Contact Form Handling - Send to WhatsApp
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
   contactForm.addEventListener('submit', function(e) {
-    // Don't prevent default - let FormSpree handle submission
+    e.preventDefault();
     
     // Get form values
     const name = document.getElementById('name').value.trim();
@@ -74,8 +74,33 @@ if (contactForm) {
       isValid = false;
     }
     
-    if (!isValid) {
-      e.preventDefault();
+    if (isValid) {
+      // Create WhatsApp message
+      const whatsappMessage = `*New Portfolio Message*%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Email:* ${encodeURIComponent(email)}%0A*Subject:* ${encodeURIComponent(subject)}%0A%0A*Message:*%0A${encodeURIComponent(message)}`;
+      
+      // WhatsApp number: 919952311744
+      const whatsappLink = `https://wa.me/919952311744?text=${whatsappMessage}`;
+      
+      // Open WhatsApp
+      window.open(whatsappLink, '_blank');
+      
+      // Show success message
+      const formMessage = document.getElementById('formMessage');
+      formMessage.textContent = 'Opening WhatsApp to send your message...';
+      formMessage.classList.add('success');
+      formMessage.classList.remove('error');
+      
+      // Reset form
+      contactForm.reset();
+      
+      // Clear message after 3 seconds
+      setTimeout(() => {
+        formMessage.textContent = '';
+        formMessage.classList.remove('success');
+      }, 3000);
+      
+      console.log('WhatsApp Message Sent:', { name, email, subject, message });
+    } else {
       const formMessage = document.getElementById('formMessage');
       formMessage.textContent = 'Please fix the errors above';
       formMessage.classList.add('error');
