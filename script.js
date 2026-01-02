@@ -37,7 +37,7 @@ const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
   contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    // Don't prevent default - let FormSpree handle submission
     
     // Get form values
     const name = document.getElementById('name').value.trim();
@@ -74,25 +74,8 @@ if (contactForm) {
       isValid = false;
     }
     
-    if (isValid) {
-      // Simulate form submission
-      const formMessage = document.getElementById('formMessage');
-      formMessage.textContent = 'Message sent successfully! I\'ll get back to you soon.';
-      formMessage.classList.add('success');
-      formMessage.classList.remove('error');
-      
-      // Reset form
-      contactForm.reset();
-      
-      // Clear message after 5 seconds
-      setTimeout(() => {
-        formMessage.textContent = '';
-        formMessage.classList.remove('success');
-      }, 5000);
-      
-      // In a real application, you would send the data to a server here
-      console.log('Form Data:', { name, email, subject, message });
-    } else {
+    if (!isValid) {
+      e.preventDefault();
       const formMessage = document.getElementById('formMessage');
       formMessage.textContent = 'Please fix the errors above';
       formMessage.classList.add('error');
